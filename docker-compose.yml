@@ -1,0 +1,21 @@
+version: '3'
+services:
+  master:
+    image: locustio/locust 
+    command: locust -f /scripts/sample1.py --master
+    network_mode: host
+    ports:
+      - "8089:8089"
+      - "5557:5557"
+      - "5558:5558"
+    volumes:
+      - ./scripts:/scripts
+
+  slave:
+    image: locustio/locust 
+    command: locust -f /scripts/sample1.py --slave --master-host=localhost
+    network_mode: host
+    depends_on:
+      - master
+    volumes:
+      - ./scripts:/scripts
